@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix'=>'v1'], function(){
+Route::name('api.')->prefix('v1')->group(function(){
     Route::get('events/active-events', [EventController::class, 'getActiveEvents'])->name('events.active-events');
     Route::apiResource('events', EventController::class);
 });
