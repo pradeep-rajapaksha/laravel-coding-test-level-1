@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +15,12 @@ use App\Http\Controllers\EventController;
 |
 */
 
-Route::get('/', function () {
-    return view('layout/app');
-})->name('dashboard');
+Route::get('/', [AuthController::class, 'dashboard'])->name('dashboard'); 
+
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::post('login', [AuthController::class, 'login'])->name('login.post'); 
+Route::get('registration', [AuthController::class, 'registration'])->name('register');
+Route::post('registration', [AuthController::class, 'register'])->name('register.post'); 
+Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::resource('events', EventController::class);
