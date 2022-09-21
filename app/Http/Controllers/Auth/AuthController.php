@@ -83,11 +83,13 @@ class AuthController extends Controller
      */
     public function dashboard()
     {
-        if(Auth::check()){
-            return view('dashboard');
-        }
+        return view('dashboard');
+        
+        // if(Auth::check()){
+            // return view('dashboard');
+        // }
 
-        return redirect()->route("login")->with('error', 'invalid login or session expired!');
+        // return redirect()->route("login")->with('error', 'invalid login or session expired!');
     }
 
     /**

@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Redis;
 use App\Models\Event;
 use App\Http\Resources\EventResource;
 
-use Event;
 use App\Events\SendMailOnEventCreate;
 
 class EventController extends Controller
@@ -72,7 +71,7 @@ class EventController extends Controller
 
         Redis::set('event_' . $event->id, $event);
 
-        Event::fire(new SendMailOnEventCreate(\Auth::user()->email));
+        event(new SendMailOnEventCreate(\Auth::user()->email));
 
         return new EventResource($event);
     }
