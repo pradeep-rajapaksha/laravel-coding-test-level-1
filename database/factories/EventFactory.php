@@ -18,8 +18,8 @@ class EventFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name, '-'),
-            'createdAt' => $this->faker->dateTimeBetween('-1 week', 'now')->format('Y-m-d H:i:s'),
-            'updatedAt' => $this->faker->dateTimeBetween('now', '+1 week')->format('Y-m-d H:i:s'),
+            'startAt' => $this->faker->dateTimeBetween('-1 week', 'now')->format('Y-m-d H:i:s'),
+            'endAt' => $this->faker->dateTimeBetween('now', '+1 week')->format('Y-m-d H:i:s'),
         ];
     }
 }

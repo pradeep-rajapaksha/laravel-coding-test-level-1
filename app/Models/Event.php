@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\HasUuid;
 
 class Event extends Model
 {
-    use HasFactory;
-    use HasUuid;
+    use HasFactory, HasUuid, SoftDeletes;
 
-    public $timestamps = false;
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -21,8 +21,8 @@ class Event extends Model
     protected $fillable = [
         'name',
         'slug',
-        'createdAt',
-        'updatedAt',
+        'startAt',
+        'endAt',
     ];
 
 }

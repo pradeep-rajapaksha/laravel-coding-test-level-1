@@ -29,7 +29,7 @@ class EventController extends Controller
     public function getActiveEvents()
     {
         $datetime = date('Y-m-d H:i:s');
-        $events = Event::where('createdAt', '<=', $datetime)->where('updatedAt', '>=', $datetime)->get();
+        $events = Event::where('startAt', '<=', $datetime)->where('endAt', '>=', $datetime)->get();
 
         return EventResource::collection($events);
     }
@@ -45,15 +45,15 @@ class EventController extends Controller
         $request->validate([
             'name' => 'required',
             'slug' => 'required|unique',
-            'createdAt' => 'required',
-            'updatedAt' => 'required',
+            'startAt' => 'required',
+            'endAt' => 'required',
         ]);
 
         $event = Event::create([
             'name' => $request->name,
             'slug' => $request->slug,
-            'createdAt' => $request->createdAt,
-            'updatedAt' => $request->updatedAt,
+            'startAt' => $request->startAt,
+            'endAt' => $request->endAt,
         ]);
 
         return new EventResource($event);
@@ -67,7 +67,7 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::find($id);
+        $event = Event::findOrFail($id);
 
         return new EventResource($event);
     }
@@ -81,7 +81,7 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $event = Event::find($id); 
+        $event = Event::findOrFail($id); 
 
         if(!$event && $request->method() === "PUT") {
             // create new event 
@@ -91,8 +91,8 @@ class EventController extends Controller
         else {
             if ($request->has('name')) { $event->name = $request->name; }
             if ($request->has('slug')) { $event->slug = $request->slug; }
-            if ($request->has('createdAt')) { $event->createdAt = $request->createdAt; }
-            if ($request->has('updatedAt')) { $event->updatedAt = $request->updatedAt; }
+            if ($request->has('startAt')) { $event->startAt = $request->startAt; }
+            if ($request->has('endAt')) { $event->endAt = $request->endAt; }
 
             $event->save();
         }
@@ -108,8 +108,7 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        // Event::where('id', $id)->delete();
-        Event::destroy($id);
+        Event::where('id', $id)->delete();
 
         return response()->json(null, 204);
     }

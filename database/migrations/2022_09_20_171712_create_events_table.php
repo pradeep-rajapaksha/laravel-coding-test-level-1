@@ -17,8 +17,10 @@ class CreateEventsTable extends Migration
             $table->uuid('id')->primary()->unique();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->dateTime('createdAt');
-            $table->dateTime('updatedAt');
+            $table->dateTime('startAt');
+            $table->dateTime('endAt');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
