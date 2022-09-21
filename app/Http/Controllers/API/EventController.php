@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use App\Models\Event;
 use App\Http\Resources\EventResource;
 
@@ -44,7 +45,7 @@ class EventController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'slug' => 'required|unique',
+            'slug' => 'required|unique:events',
             'startAt' => 'required',
             'endAt' => 'required',
         ]);
@@ -55,6 +56,8 @@ class EventController extends Controller
             'startAt' => $request->startAt,
             'endAt' => $request->endAt,
         ]);
+
+        Redis::set('event_' . $event->id, $event);
 
         return new EventResource($event);
     }
@@ -67,7 +70,15 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::findOrFail($id);
+        $cachedEvent = Redis::get('event_' . $id);
+        
+        if(isset($cachedEvent)) {
+            $event = json_decode($cachedEvent, FALSE);
+        } 
+        else {
+            $event = Event::findOrFail($id);
+            Redis::set('event_' . $id, $event);
+        }
 
         return new EventResource($event);
     }
@@ -95,6 +106,9 @@ class EventController extends Controller
             if ($request->has('endAt')) { $event->endAt = $request->endAt; }
 
             $event->save();
+            
+            Redis::del('event_' . $id);
+            Redis::set('event_' . $id, $event);
         }
 
         return new EventResource($event);
@@ -109,6 +123,8 @@ class EventController extends Controller
     public function destroy($id)
     {
         Event::where('id', $id)->delete();
+
+        Redis::del('event_' . $id);
 
         return response()->json(null, 204);
     }

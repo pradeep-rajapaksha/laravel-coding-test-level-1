@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use Illuminate\Support\Facades\Redis;
 
 class EventController extends Controller
 {
@@ -51,6 +52,8 @@ class EventController extends Controller
             'endAt' => $request->endAt,
         ]);
 
+        Redis::set('event_' . $event->id, $event);
+
         return redirect()->route('events.show', ['event' => $event]);
     }
 
@@ -62,7 +65,15 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::findOrFail($id);
+        $cachedEvent = Redis::get('event_' . $id);
+        
+        if(isset($cachedEvent)) {
+            $event = json_decode($cachedEvent, FALSE);
+        } 
+        else {
+            $event = Event::findOrFail($id);
+            Redis::set('event_' . $id, $event);
+        }
 
         return view('events.view', ['event' => $event]);
     }
@@ -105,6 +116,9 @@ class EventController extends Controller
 
         $event->save();
 
+        Redis::del('event_' . $id);
+        Redis::set('event_' . $id, $event);
+
         return redirect()->route('events.show', ['event' => $event]);
     }
 
@@ -119,6 +133,8 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
 
         $event->delete();
+
+        Redis::del('event_' . $id);
 
         return redirect()->route('events.index');
     }
