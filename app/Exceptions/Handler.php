@@ -48,7 +48,6 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         if ($request->header('Content-Type') == 'application/json' || $request->is('api/*')) {
-            // dd($request);
             return response(['error' => $e->getMessage()], $e->getCode() ?: 400);
         }
     }

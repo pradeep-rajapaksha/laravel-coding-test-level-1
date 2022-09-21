@@ -33,8 +33,9 @@
                                 <td>{{ $event->startAt }}</td>
                                 <td>{{ $event->endAt }}</td>
                                 <td class="col-sm-1 align-middle">
-                                    <form action="{{ route('events.destroy', $event->id) }}" method="DELETE" class="d-inline">
+                                    <form action="{{ route('events.destroy', $event->id) }}" method="post" class="d-inline">
                                         @csrf
+                                        @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                                     </form>
 

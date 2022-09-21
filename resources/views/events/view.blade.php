@@ -36,10 +36,11 @@
 
                     <a href="{{ route('events.edit', $event->id) }}" class="btn btn-primary btn-sm">Edit</a>
 
-                    <!-- <form action="{{ route('events.destroy', $event->id) }}" method="DELETE" class="d-inline">
+                    <form action="{{ route('events.destroy', $event->id) }}" method="post" class="d-inline">
                         @csrf
+                        @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form> -->
+                    </form>
                 </div>
             </div>
         </div>

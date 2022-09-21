@@ -90,7 +90,7 @@ class EventController extends Controller
     public function update(Request $request, $id)
     {
         $event = Event::findOrFail($id);
-dd($event);
+
         $request->validate([
             'name' => 'required',
             'slug' => 'required|unique:events,slug,'.$id,
@@ -98,12 +98,12 @@ dd($event);
             'endAt' => 'required',
         ]);
 
-        $event->update([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'startAt' => $request->startAt,
-            'endAt' => $request->endAt,
-        ]);
+        $event->name = $request->name;
+        $event->slug = $request->slug;
+        $event->startAt = $request->startAt;
+        $event->endAt = $request->endAt;
+
+        $event->save();
 
         return redirect()->route('events.show', ['event' => $event]);
     }
@@ -116,7 +116,6 @@ dd($event);
      */
     public function destroy($id)
     {
-dd($id);
         $event = Event::findOrFail($id);
 
         $event->delete();

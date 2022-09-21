@@ -11,7 +11,7 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <form action="{{ route('events.store') }}" method="post">
+                <form action="{{ route('events.store') }}" method="post" onsubmit="submit()">
                     @csrf
                     @include('events.form')
                 </form>

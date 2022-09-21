@@ -11,8 +11,9 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <form action="{{ route('events.update', $event->id) }}" method="PUT">
+                <form action="{{ route('events.update', $event->id) }}" method="post">
                     @csrf
+                    @method('PATCH')
                     @include('events.form')
                 </form>
             </div>
