@@ -32,6 +32,18 @@
                 </li>
             </ul> -->
         </nav>
+
+        @if(session()->has('error'))
+            <div class="alert alert-warning alert-dismissible fade show" role="alert" style="position: absolute; right: 10px; top: 10px; min-width: 250px; max-width: 400px;">
+                {{ session()->get('error') }}
+            </div>
+        @endif
+
+        @if(session()->has('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 10px; top: 10px; min-width: 250px; max-width: 400px;">
+                {{ session()->get('success') }}
+            </div>
+        @endif
         
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
